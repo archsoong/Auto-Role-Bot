@@ -2,12 +2,20 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 
 // Bot configuration
 const config = {
-    token: 'MTM5NDkxMDU4MDk1OTA4ODY4MQ.GajMx8.PfL6eOPIhDN9tN7BsEzA08hVaQSoxUE3M17LYw', // Replace with your bot token
+    token: process.env.DISCORD_TOKEN || process.env.TOKEN || 'MTM5NDkxMDU4MDk1OTA4ODY4MQ.GajMx8.PfL6eOPIhDN9tN7BsEzA08hVaQSoxUE3M17LYw', // Try multiple env var names
     inviteRoleMap: {
         // Map invite codes to role IDs
-        'DaR8P9E7Fm': '1394618100879589396' // Replace with actual invite code and role ID
+        'DaR8P9E7Fm': '1394618100879589396' //Example: 'abc123def': '123456789012345678'
     }
 };
+
+// Add token validation
+if (!config.token || config.token === 'YOUR_BOT_TOKEN') {
+    console.error('❌ ERROR: No valid Discord token provided!');
+    console.error('Please set the DISCORD_TOKEN environment variable in Zeabur.');
+    console.error('Available environment variables:', Object.keys(process.env).filter(key => key.includes('TOKEN')));
+    process.exit(1);
+}
 
 // Create bot client
 const client = new Client({
@@ -23,16 +31,18 @@ const invites = new Collection();
 
 // Bot ready event
 client.once('ready', async () => {
-    console.log(`Bot is ready! Logged in as ${client.user.tag}`);
+    console.log(`✅ Bot is ready! Logged in as ${client.user.tag}`);
+    console.log(`🏠 Bot is in ${client.guilds.cache.size} server(s)`);
+    console.log(`🔗 Invite mappings configured: ${Object.keys(config.inviteRoleMap).length}`);
     
     // Cache all invites for all guilds
     for (const guild of client.guilds.cache.values()) {
         try {
             const guildInvites = await guild.invites.fetch();
             invites.set(guild.id, new Collection(guildInvites.map(invite => [invite.code, invite.uses])));
-            console.log(`Cached ${guildInvites.size} invites for guild: ${guild.name}`);
+            console.log(`📋 Cached ${guildInvites.size} invites for guild: ${guild.name}`);
         } catch (error) {
-            console.error(`Error caching invites for guild ${guild.name}:`, error);
+            console.error(`❌ Error caching invites for guild ${guild.name}:`, error);
         }
     }
 });
