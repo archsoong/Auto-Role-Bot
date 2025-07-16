@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 
 // Bot configuration
 const config = {
-    token: 'MTM5NDkxMDU4MDk1OTA4ODY4MQ.GRkQKS.YfQ6yt4g2pStAdmhOx5bYJq9tTgiADQwQLoxwM', // Try multiple env var names
+    token: process.env.TOKEN || process.env.DISCORD_TOKEN || process.env.BOT_TOKEN, // Try multiple env var names
     inviteRoleMap: {
         // Map invite codes to role IDs
         'DaR8P9E7Fm': '1394618100879589396' //Example: 'abc123def': '123456789012345678'
