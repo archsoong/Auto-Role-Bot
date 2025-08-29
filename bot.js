@@ -8,7 +8,8 @@ const config = {
     token: process.env.TOKEN || process.env.DISCORD_TOKEN || process.env.BOT_TOKEN, // Try multiple env var names
     inviteRoleMap: {
         // Map invite codes to role IDs
-        'DmFzg8Pdk3': '1394618100879589396' //Example: 'abc123def': '123456789012345678'
+        'DmFzg8Pdk3': '1394618100879589396', //Example: 'abc123def': '123456789012345678'
+        'TW8zH8rSp3': '1410812878180716584'
     }
 };
 
